@@ -191,7 +191,7 @@ git push -u origin fix/issue-N-short-description
 <!-- TODO: List files/areas that are dangerous to modify carelessly.
      High-risk areas typically include:
      - Auth, session, or token handling
-     - Anything that reads from or writes to .env / secrets
+     - Anything that reads from or writes to secrets / credentials
      - Database migration scripts
      - Deployment or CI/CD pipeline configuration
      - File system operations that can delete or overwrite data
@@ -204,9 +204,24 @@ git push -u origin fix/issue-N-short-description
 
 ---
 
-## .env Files
+## Secrets & Sensitive Data
 
-**Never read `.env` files directly.** The `.claude/settings.json` blocks direct reads, and the `redact-env-hook.py` PreToolUse hook provides a redacted version instead. `.env.example` template files can be read freely.
+**Never read secret files directly into AI context.** This project uses a redaction layer to prevent accidental exposure of sensitive values.
+
+**How it works in this project:**
+
+- `.claude/settings.json` — defines which files Claude Code is denied direct read access to
+- `.claude/` — contains the redaction mechanism (hook, script, or equivalent) that intercepts reads of sensitive files and returns a masked version instead
+
+<!-- TODO: Describe the specific redaction mechanism for this project. Example:
+  - `redact-env-hook.py` intercepts .env reads via a PreToolUse hook and masks values matching SECRET|TOKEN|PASS|KEY|CREDENTIAL
+  - Update the deny list in `.claude/settings.json` to cover all secret file paths relevant to this project
+  - Add patterns for any project-specific secret key names not covered by the default regex
+-->
+
+**Safe to read:** `.env.example` and any other `*.example` template files — these contain placeholder values only and can be read freely.
+
+See `AGENTS.md → Secrets & Sensitive Data` for the full principles that govern how all AI assistants must handle sensitive information in this repo.
 
 ---
 

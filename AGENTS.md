@@ -59,12 +59,40 @@ This file is the **canonical working rules document** for all AI assistants oper
 
 ---
 
+## Secrets & Sensitive Data
+
+These rules apply to **any information that could cause harm if exposed** — not just `.env` files. This includes API keys, tokens, passwords, credentials, PII, private keys, connection strings, and any file or data store that holds them.
+
+**Never read or expose secrets directly:**
+- Do not read secret files (`.env`, key files, credential stores, config files with embedded secrets) directly into AI context
+- Do not log, print, or include secret values in commit messages, PR bodies, comments, or documentation
+- Do not pass raw secret values as function arguments in examples or test fixtures
+
+**Always use a redaction mechanism:**
+- Every project that handles secrets must have a redaction layer — a hook, script, or pre-processing step that masks sensitive values before they reach AI context
+- The mechanism should: intercept reads of secret files, replace sensitive values with `[redacted]`, and pass only the sanitised version forward
+- Use regex patterns matching common secret key names (e.g. `SECRET`, `TOKEN`, `PASS`, `KEY`, `CREDENTIAL`) as a baseline — extend for project-specific patterns
+- Document the redaction mechanism in `CLAUDE.md` so AI tools know how to use it
+
+**Safe patterns to follow:**
+- Keep a `.env.example` (or equivalent) with placeholder values — this is always safe to read and commit
+- Use environment variable names in code and docs; never inline actual values
+- When an AI assistant needs to understand the shape of a config, point it to the `.example` file
+- When a secret must be rotated or referenced in a PR, describe it by key name only
+
+**If you discover a secret has been exposed:**
+- Treat it as compromised immediately — rotate it before doing anything else
+- Do not attempt to rewrite git history to remove it without also rotating; history rewrites alone are not sufficient
+- Flag the exposure as a high-priority issue
+
+---
+
 ## Debugging & Logging
 
 - Build observability into every change — logging is part of the implementation
 - Add structured log lines at: entry points, external-call outcomes, key branch decisions, failure paths
 - Log the *why* of a failure: error message + relevant inputs + what was expected
-- Never log secrets, tokens, JWTs, hashes, or `.env` values
+- Never log secrets, tokens, JWTs, hashes, or any sensitive value
 - A change isn't done until: "if this breaks in prod, how would we diagnose it from logs alone?" has an answer
 - Fail loud, not silent — surface warnings as hard failures where appropriate
 
@@ -82,10 +110,10 @@ This file is the **canonical working rules document** for all AI assistants oper
 
 ## Security Discipline
 
-- Never read `.env` files directly — use the redact hook or `.env.example` templates
-- Never log or expose secrets, tokens, or credentials
 - Security and auth changes: one branch at a time, high test coverage, read the full auth file before editing
 - Parameterised queries always — never string concatenation for SQL or shell commands
+- Validate and sanitise all external input before use
+- Principle of least privilege — request only the permissions a component actually needs
 
 ---
 
@@ -106,8 +134,9 @@ For any project where AI suggestions can result in file system changes, shell ex
 - Merge PRs
 - Push directly to `main` or `dev`
 - Delete branches without instruction
-- Modify `.env` files
+- Modify secret files or credential stores
 - Make broad refactors outside the current issue scope
 - Skip the PR template
 - Leave documentation out of date
 - Execute destructive file operations without a preceding dry-run and explicit approval
+- Read or relay sensitive data without passing it through the project’s redaction mechanism first
