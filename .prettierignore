@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Lock files (don't reformat these)
+package-lock.json
+yarn.lock
+pipfile.lock
+
+# Generated
+coverage/
+*.min.js
+*.min.css

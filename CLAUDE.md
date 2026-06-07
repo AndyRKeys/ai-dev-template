@@ -1,0 +1,221 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> **Template notice:** Lines marked `<!-- TODO -->` need filling in for this specific project. Delete the markers once done.
+
+---
+
+## Quick Orientation (2 minutes)
+
+**What is this?** <!-- TODO: One sentence describing the project -->
+
+**Tech stack:**
+
+- <!-- TODO: Frontend framework / language -->
+- <!-- TODO: Backend framework / language -->
+- <!-- TODO: Database -->
+- <!-- TODO: Infrastructure / hosting -->
+- AI pair programmer: Claude Sonnet via Anthropic API
+
+**Key files:**
+
+- <!-- TODO: Entry point -->
+- <!-- TODO: Routes / controllers -->
+- <!-- TODO: Data / schema -->
+- `docs/AI.md` — your working instructions (scope, commits, documentation, code style)
+
+---
+
+## Before You Start
+
+1. **Read the onboarding docs in this order:**
+   - `README.md` — architecture, local setup, branching, deployment
+   - `docs/AI.md` — working instructions, scope discipline, commit conventions
+   - `docs/STYLE_GUIDE.md` — naming, code patterns
+   - `docs/TERMINOLOGY.md` — canonical names (host, environments, services, branches)
+
+2. **Project orientation:**
+   - Branching: `main` (prod) ← `dev` (integration) ← `feature/issue-N-*` (your work)
+   - Always branch from `dev`. Never commit directly to `main`.
+   - One branch at a time for ops/infra or security work — finish, PR, merge before starting the next.
+
+3. **Current state:** <!-- TODO: Brief note on what's working, what's in progress -->
+
+---
+
+## Common Commands
+
+<!-- TODO: Fill in for your stack -->
+
+### Local Development
+
+```bash
+# Start dev environment
+# TODO
+
+# Run tests
+# TODO
+
+# Stop / clean up
+# TODO
+```
+
+### Git Workflow
+
+```bash
+# Start new work
+git checkout dev
+git pull origin dev
+git checkout -b fix/issue-N-short-description
+
+# Commit
+git add <files>
+git commit -m "fix: correct the thing
+
+Why this change was needed and what it does.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+
+# Push and open PR (default — do this automatically once work is complete)
+git push -u origin fix/issue-N-short-description
+# Then open PR to dev
+```
+
+**PR creation is the default.** Once the branch is pushed and the work is complete, open the PR to `dev` automatically — do not ask first. You still never merge it (owner reviews + merges). Skip only if work is explicitly incomplete/experimental.
+
+**Every PR must fully fill in the template at `.github/pull_request_template.md`.**
+
+**Issue labelling (AI-managed):**
+
+- When starting work on an issue: apply `in progress`
+- When opening a PR to `dev`: switch to `awaiting review`
+- After merge to `dev` but before release: switch to `awaiting release`
+- After deployed to production: switch to `released`
+
+**Type labels (add all that apply):** `bug` · `feature` · `security` · `ops` · `documentation` · `workflow` · `high priority` · `regression` · `UI`
+
+---
+
+## Architecture & Key Concepts
+
+<!-- TODO: Describe the architecture here. Include:
+  - How requests flow through the system
+  - Key directories and what lives in each
+  - Any non-obvious design decisions
+  - Auth model if applicable
+-->
+
+---
+
+## Common Patterns & Conventions
+
+<!-- TODO: Add project-specific patterns. Generic defaults below — keep what applies, replace the rest. -->
+
+### Naming
+
+- Camel case for variables and functions
+- Kebab case for file names and CSS classes
+- Underscore case for database columns
+
+### Code style
+
+- Prefer explicit over clever
+- Extract repeated logic — don't duplicate validation, error handling, or config
+- Parameterised queries always — never string concatenation for SQL
+
+### Section headers (JS/Python comments)
+
+```js
+// ── Section name
+```
+
+### Commit messages
+
+- Imperative present tense: "fix", "add", "refactor" — not "fixed", "added"
+- Short summary (≤50 chars), blank line, optional explanation
+- Always include `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` footer
+
+---
+
+## Debugging & Logging
+
+**Build observability into every change — it is part of the implementation, not a follow-up.**
+
+- Add structured log lines at meaningful decision points (entry, external-call outcomes, branch taken, failure reasons)
+- Log the *why* of a failure (error + relevant inputs + expectation), never secrets
+- A change isn't done until you can answer: "if this breaks in prod, how would we diagnose it from logs alone?"
+- Fail loud, not silent — surface warnings as hard failures, not silent skips
+
+---
+
+## Testing
+
+<!-- TODO: Describe test strategy, how to run tests, what's covered -->
+
+**PR test plan rules (every PR that touches application code):**
+
+- Every step must include the exact copy-paste command
+- Add a comment above every command explaining what it verifies
+- State the expected output so the reviewer knows pass vs fail
+- Where a step requires waiting (e.g. token expiry), provide a way to simulate it
+
+---
+
+## Documentation
+
+**Docs must move in lockstep with code.**
+
+**When to update docs (same PR):**
+
+- Scripts are added, removed, or renamed
+- Deploy / testing / operational workflows change
+- Routes, APIs, or env vars are added or changed
+- Any behaviour change that affects how someone develops, deploys, tests, or debugs
+
+**What to update:**
+
+- `README.md` — top-level workflow, commands, directory trees
+- `docs/AI.md` — working rules for AI helpers
+- `docs/CHANGELOG.md` — every PR gets a `[Unreleased]` entry
+- Ops docs as applicable
+
+**Treat the documentation checklist in the PR template as mandatory.** If no docs change is needed, explicitly state why.
+
+---
+
+## High-Risk Areas
+
+<!-- TODO: List files/areas that are dangerous to modify carelessly -->
+
+| File | Why | Mitigation |
+|------|-----|------------|
+| <!-- e.g. auth.js --> | <!-- e.g. WebAuthn state machine --> | <!-- e.g. High test coverage; read full file before editing --> |
+
+---
+
+## .env Files
+
+**Never read `.env` files directly.** The `.claude/settings.json` blocks direct reads, and the `redact-env-hook.py` PreToolUse hook provides a redacted version instead. `.env.example` template files can be read freely.
+
+---
+
+## Questions to Clarify Before Starting
+
+- **Branching:** Are you working from `dev`? (Always, unless it's a hotfix from `main`.)
+- **Scope:** Is this a small bug fix, a feature, or refactoring? (Affects test strategy.)
+- **Data:** Is any existing data being migrated, or is this a fresh change?
+
+---
+
+## TL;DR — Just Starting Work?
+
+1. Pull latest `dev`: `git fetch origin dev && git checkout dev && git pull`
+2. Create branch: `git checkout -b fix/issue-N-short-desc`
+3. Start dev environment
+4. Make changes, run tests
+5. Commit with `Co-Authored-By` footer
+6. Push and open PR to `dev` with `Closes #N` in the body
+7. Apply `awaiting review` label to the issue
+
+Ask if anything is unclear.

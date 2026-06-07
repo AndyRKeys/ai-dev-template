@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "DavidAnson.vscode-markdownlint",
+    "EditorConfig.EditorConfig",
+    "GitHub.copilot",
+    "ms-python.python",
+    "ms-python.black-formatter"
+  ]
+}
