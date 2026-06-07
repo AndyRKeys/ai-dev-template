@@ -53,7 +53,7 @@ Closes #<!-- issue number -->
 <!-- Tick all that apply. If a box is not relevant, mark N/A. -->
 
 - [ ] `docs/CHANGELOG.md` updated with an entry under `[Unreleased]`
-- [ ] `docs/AI.md` / `docs/STYLE_GUIDE.md` updated if working rules or patterns changed
+- [ ] `AGENTS.md` / `docs/STYLE_GUIDE.md` updated if working rules or patterns changed
 - [ ] `README.md` updated if commands, setup steps, or directory structure changed
 - [ ] N/A — behaviour and operator docs already match the change (no updates needed)
 
@@ -74,7 +74,7 @@ Closes #<!-- issue number -->
 
 <body>
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Co-Authored-By: <AI Model Name> <noreply@example.com>
 ```
 
 ## Notes for Reviewer

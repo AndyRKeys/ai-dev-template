@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - <!-- TODO: Backend framework / language -->
 - <!-- TODO: Database -->
 - <!-- TODO: Infrastructure / hosting -->
-- AI pair programmer: Claude Sonnet via Anthropic API
+- AI pair programmer: <!-- TODO: Model + provider used on this project -->
 
 **Key files:**
 
@@ -76,7 +76,7 @@ git commit -m "fix: correct the thing
 
 Why this change was needed and what it does.
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+Co-Authored-By: <AI Model Name> <noreply@example.com>"
 
 # Push and open PR (default — do this automatically once work is complete)
 git push -u origin fix/issue-N-short-description
@@ -188,59 +188,33 @@ git push -u origin fix/issue-N-short-description
 
 ## High-Risk Areas
 
-<!-- TODO: List files/areas that are dangerous to modify carelessly.
-     High-risk areas typically include:
-     - Auth, session, or token handling
-     - Anything that reads from or writes to secrets / credentials
-     - Database migration scripts
-     - Deployment or CI/CD pipeline configuration
-     - File system operations that can delete or overwrite data
-     - Any external API integration that has billing or rate-limit consequences
--->
+Review these areas with extra care and slower-than-normal edits:
 
-| File | Why | Mitigation |
-|------|-----|------------|
-| <!-- e.g. auth.js --> | <!-- e.g. WebAuthn state machine --> | <!-- e.g. High test coverage; read full file before editing --> |
+- Authentication, session, token, and permission logic
+- Secret-bearing config, credential handling, and deployment settings
+- Database schema and migration scripts
+- File deletion, overwrite, move, sync, or bulk update logic
+- Payment, billing, and externally visible automation
+
+<!-- TODO: Add project-specific high-risk files and directories here -->
 
 ---
 
-## Secrets & Sensitive Data
+## Sensitive File Handling
 
-**Never read secret files directly into AI context.** This project uses a redaction layer to prevent accidental exposure of sensitive values.
-
-**How it works in this project:**
-
-- `.claude/settings.json` — defines which files Claude Code is denied direct read access to
-- `.claude/` — contains the redaction mechanism (hook, script, or equivalent) that intercepts reads of sensitive files and returns a masked version instead
-
-<!-- TODO: Describe the specific redaction mechanism for this project. Example:
-  - `redact-env-hook.py` intercepts .env reads via a PreToolUse hook and masks values matching SECRET|TOKEN|PASS|KEY|CREDENTIAL
-  - Update the deny list in `.claude/settings.json` to cover all secret file paths relevant to this project
-  - Add patterns for any project-specific secret key names not covered by the default regex
--->
-
-**Safe to read:** `.env.example` and any other `*.example` template files — these contain placeholder values only and can be read freely.
-
-See `AGENTS.md → Secrets & Sensitive Data` for the full principles that govern how all AI assistants must handle sensitive information in this repo.
+- Never read secret-bearing files directly into AI context
+- Use the project redaction mechanism when inspecting sensitive config
+- Prefer example files or sanitised samples when reasoning about config shape
+- Treat `.env*`, key material, deploy credentials, and local override files as sensitive by default
 
 ---
 
-## Questions to Clarify Before Starting
+## Done Criteria
 
-- **Branching:** Are you working from `dev`? (Always, unless it's a hotfix from `main`.)
-- **Scope:** Is this a small bug fix, a feature, or refactoring? (Affects test strategy.)
-- **Data:** Is any existing data being migrated, or is this a fresh change?
+A task is only done when all of the following are true:
 
----
-
-## TL;DR — Just Starting Work?
-
-1. Pull latest `dev`: `git fetch origin dev && git checkout dev && git pull`
-2. Create branch: `git checkout -b fix/issue-N-short-desc`
-3. Start dev environment
-4. Make changes, run tests
-5. Commit with `Co-Authored-By` footer
-6. Push and open PR to `dev` with `Closes #N` in the body
-7. Apply `awaiting review` label to the issue
-
-Ask if anything is unclear.
+- Code changes are complete and scoped to the current issue
+- Tests relevant to the change are run or explicitly documented as not applicable
+- Logs / observability are good enough to diagnose failures
+- Documentation is updated or the PR explains why no doc change is needed
+- A PR to `dev` is opened with the template fully completed

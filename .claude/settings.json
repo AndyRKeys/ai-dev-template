@@ -2,9 +2,17 @@
   "permissions": {
     "deny": [
       "Read(**/.env)",
-      "Read(**/.env.local)",
-      "Read(**/.env.production)",
-      "Read(**/.env.prod)"
+      "Read(**/.env.*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Read(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Read(**/terraform.tfvars)",
+      "Read(**/.npmrc)",
+      "Read(**/.pypirc)",
+      "Read(**/appsettings.*.json)",
+      "Read(**/secrets.yml)",
+      "Read(**/secrets.yaml)"
     ]
   },
   "hooks": {
@@ -14,8 +22,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/redact-env-hook.py",
-            "statusMessage": "Checking file access policy..."
+            "command": "python3 .claude/redact-sensitive-hook.py",
+            "statusMessage": "Checking sensitive file access policy..."
           }
         ]
       }

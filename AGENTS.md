@@ -4,7 +4,7 @@ This file is the **canonical working rules document** for all AI assistants oper
 
 `CLAUDE.md` (Claude Code entry point) and any other tool-specific entry files all defer to this document for detail.
 
-> **Model version note:** The `Co-Authored-By` footer in commits should reflect the model actually used. Update it when switching models (e.g. `Claude Sonnet 4.6`, `gpt-4o`, `gemini-2.5-pro`).
+> **Model version note:** The `Co-Authored-By` footer in commits should reflect the model actually used. Update it when switching models (for example `Claude Sonnet 4.6`, `GPT-5`, `gemini-2.5-pro`).
 
 ---
 
@@ -22,8 +22,8 @@ This file is the **canonical working rules document** for all AI assistants oper
 - Imperative present tense: "fix", "add", "refactor" — not "fixed", "added", "refactored"
 - Short summary (≤50 chars), blank line, optional body explaining *why* (not what — the diff shows what)
 - Always include the `Co-Authored-By` footer, updated to match the model in use:
-  ```
-  Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+  ```text
+  Co-Authored-By: <AI Model Name> <noreply@example.com>
   ```
 - Commit logical units of work — don't bundle unrelated changes in one commit
 - Atomic commits: each commit should leave the codebase in a working state
@@ -63,22 +63,29 @@ This file is the **canonical working rules document** for all AI assistants oper
 
 These rules apply to **any information that could cause harm if exposed** — not just `.env` files. This includes API keys, tokens, passwords, credentials, PII, private keys, connection strings, and any file or data store that holds them.
 
-**Never read or expose secrets directly:**
-- Do not read secret files (`.env`, key files, credential stores, config files with embedded secrets) directly into AI context
-- Do not log, print, or include secret values in commit messages, PR bodies, comments, or documentation
+**Never read or expose sensitive data directly:**
+- Do not read secret-bearing files directly into AI context
+- Do not log, print, or include sensitive values in commit messages, PR bodies, comments, or documentation
 - Do not pass raw secret values as function arguments in examples or test fixtures
 
+**Examples of files that may contain secrets:**
+- `.env*`
+- `*.key`, `*.pem`, `*.p12`, `*.pfx`
+- cloud credentials in `.aws/`, `.config/gcloud/`, `.azure/`
+- Docker, Terraform, CI, or deploy config containing embedded credentials
+- local override files such as `secrets.yml`, `appsettings.*.json`, `terraform.tfvars`, `.npmrc`, `.pypirc`
+
 **Always use a redaction mechanism:**
-- Every project that handles secrets must have a redaction layer — a hook, script, or pre-processing step that masks sensitive values before they reach AI context
-- The mechanism should: intercept reads of secret files, replace sensitive values with `[redacted]`, and pass only the sanitised version forward
-- Use regex patterns matching common secret key names (e.g. `SECRET`, `TOKEN`, `PASS`, `KEY`, `CREDENTIAL`) as a baseline — extend for project-specific patterns
+- Every project that handles sensitive data must have a redaction layer — a hook, script, or pre-processing step that masks values before they reach AI context
+- The mechanism should: intercept reads of secret-bearing files, replace sensitive values with `[redacted]`, and pass only the sanitised version forward
+- Use regex patterns matching common secret key names (for example `SECRET`, `TOKEN`, `PASS`, `KEY`, `CREDENTIAL`, `PRIVATE`, `CERT`) as a baseline — extend for project-specific patterns
 - Document the redaction mechanism in `CLAUDE.md` so AI tools know how to use it
 
 **Safe patterns to follow:**
-- Keep a `.env.example` (or equivalent) with placeholder values — this is always safe to read and commit
-- Use environment variable names in code and docs; never inline actual values
-- When an AI assistant needs to understand the shape of a config, point it to the `.example` file
-- When a secret must be rotated or referenced in a PR, describe it by key name only
+- Keep an `.env.example` or equivalent example config with placeholder values only — safe to read and commit
+- Use variable names and config keys in code and docs; never inline actual values
+- When an AI assistant needs to understand the shape of a config, point it to the example file or sanitised sample
+- When a secret must be referenced in a PR, describe it by key name only
 
 **If you discover a secret has been exposed:**
 - Treat it as compromised immediately — rotate it before doing anything else
@@ -104,7 +111,7 @@ These rules apply to **any information that could cause harm if exposed** — no
 - A `# comment` above every command explaining what it verifies and why it matters for this PR
 - The **expected output** after each command — reviewer knows pass vs fail at a glance
 - Steps for both happy path and key edge cases
-- Where a step requires waiting (e.g. token expiry), a DB or config command to simulate it instead
+- Where a step requires waiting (for example token expiry), a DB or config command to simulate it instead
 
 ---
 
@@ -126,6 +133,15 @@ For any project where AI suggestions can result in file system changes, shell ex
 - **Quarantine before delete** — prefer moving items to a dated quarantine folder over permanent deletion
 - **Scope writes to one root at a time** — never operate across multiple root directories in a single command
 - **Log every proposed action to a file** before execution so there is a reviewable audit trail
+
+---
+
+## Merge Conflict Handling
+
+- Prefer `git rebase` onto the latest target branch rather than merging the target branch into the feature branch
+- If conflicts touch auth, secrets, migrations, infrastructure, or generated lockfiles, stop and request human review
+- Never force-push to protected branches
+- If a conflict resolution could change behaviour in a non-obvious way, document it in the PR notes and test plan
 
 ---
 
