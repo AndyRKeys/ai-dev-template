@@ -10,7 +10,7 @@ This file captures significant architectural and tooling decisions made in this 
 
 Copy the template below, fill it in, and append it to this file. Keep entries in chronological order.
 
-```
+```markdown
 ## ADR-NNN — Title
 
 **Date:** YYYY-MM-DD  

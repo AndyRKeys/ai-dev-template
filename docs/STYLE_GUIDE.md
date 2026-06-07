@@ -66,7 +66,7 @@ Naming conventions, code patterns, and component variants for this project.
 
 <!-- TODO: Describe the directory structure and what belongs where -->
 
-```
+```text
 project-root/
 ├── src/           # Application source
 ├── tests/         # Test files mirroring src/ structure
