@@ -62,6 +62,62 @@ This file is the **canonical working rules document** for all AI assistants oper
 
 ---
 
+## Markdown Linting (mandatory before every commit)
+
+The CI `docs-and-format` job runs `markdownlint` on every PR. **You must run the linter locally against any `.md` files you have touched before committing.** Do not rely on CI to catch lint errors — fix them before the commit.
+
+### One-time setup
+
+```bash
+npm install --global markdownlint-cli
+```
+
+### Run before every commit that touches `.md` files
+
+```bash
+# Lint only the files you changed (fast)
+markdownlint <path/to/changed-file.md> [<another.md> ...]
+
+# Or lint the whole repo at once
+markdownlint "**/*.md"
+```
+
+### Common violations to avoid
+
+| Rule | What it catches | Fix |
+|---|---|---|
+| `MD040` | Fenced code block with no language specified | Add a language: ` ```bash `, ` ```text `, ` ```markdown `, etc. Use ` ```text ` for plain diagrams or file trees. |
+| `MD022` | Heading not surrounded by blank lines | Add a blank line before and after every heading. |
+| `MD032` | List not surrounded by blank lines | Add a blank line before and after every list. |
+| `MD009` | Trailing spaces | Remove trailing whitespace (exception: two trailing spaces for a hard line break). |
+
+> **MD013 (line length), MD024 (duplicate headings), MD036 (emphasis as heading), MD041 (first line heading), and MD060 (fenced code style) are disabled** in `.markdownlint.json` — you do not need to worry about those.
+
+### When adding a new fenced code block
+
+Always specify the language. If the content is not code but a diagram, file tree, or plain text output, use ` ```text `.
+
+```text
+# CORRECT
+```bash
+npm install
+```
+
+# CORRECT (plain / diagram)
+```text
+project-root/
+├── src/
+└── docs/
+```
+
+# WRONG — triggers MD040
+```
+npm install
+```
+```
+
+---
+
 ## Secrets & Sensitive Data
 
 These rules apply to **any information that could cause harm if exposed** — not just `.env` files. This includes API keys, tokens, passwords, credentials, PII, private keys, connection strings, and any file or data store that holds them.
@@ -164,3 +220,4 @@ For any project where AI suggestions can result in file system changes, shell ex
 - Leave documentation out of date
 - Execute destructive file operations without a preceding dry-run and explicit approval
 - Read or relay sensitive data without passing it through the project's redaction mechanism first
+- Commit `.md` files without first running `markdownlint` and resolving all errors

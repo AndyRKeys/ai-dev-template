@@ -45,6 +45,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## Pre-flight Checks (run before every commit)
+
+These must pass before you commit. Do not rely on CI to catch them.
+
+### 1. Markdown lint (if any `.md` files changed)
+
+```bash
+# Install once
+npm install --global markdownlint-cli
+
+# Lint changed files (replace with actual paths)
+markdownlint path/to/changed.md
+
+# Or lint everything
+markdownlint "**/*.md"
+```
+
+All errors must be resolved before committing. See the **Markdown Linting** section in `AGENTS.md` for the list of active rules and common fixes — especially `MD040` (fenced code blocks must have a language specifier).
+
+### 2. Template hygiene (if repo structure changed)
+
+The CI checks that these files exist. Verify they are all present if you have added, moved, or deleted any:
+
+```bash
+test -f README.md && test -f AGENTS.md && test -f CLAUDE.md &&
+test -f CONTRIBUTING.md && test -f SECURITY.md &&
+test -f .env.example &&
+test -f docs/CHANGELOG.md && test -f docs/DECISIONS.md &&
+test -f docs/STYLE_GUIDE.md && test -f docs/TERMINOLOGY.md &&
+test -f .github/pull_request_template.md &&
+echo "All required files present" || echo "MISSING FILES — check output above"
+```
+
+---
+
 ## Common Commands
 
 <!-- TODO: Fill in for your stack -->
@@ -70,7 +105,7 @@ git checkout dev
 git pull origin dev
 git checkout -b fix/issue-N-short-description
 
-# Commit
+# Before committing — run pre-flight checks above, then:
 git add <files>
 git commit -m "fix: correct the thing
 
@@ -198,8 +233,8 @@ Review these areas with extra care and slower-than-normal edits:
 
 <!-- TODO: Add project-specific high-risk files and directories here -->
 
-| File                  | Why                                  | Mitigation                                                      |
-| --------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| File | Why | Mitigation |
+| --- | --- | --- |
 | <!-- e.g. auth.js --> | <!-- e.g. WebAuthn state machine --> | <!-- e.g. High test coverage; read full file before editing --> |
 
 ---
@@ -215,9 +250,10 @@ Review these areas with extra care and slower-than-normal edits:
 
 ## Done Criteria
 
-A task is only done when all of the following are true:
+A task is only done when **all** of the following are true:
 
 - Code changes are complete and scoped to the current issue
+- **Pre-flight checks have been run and pass** (markdownlint on any changed `.md` files; template hygiene if structure changed)
 - Tests relevant to the change are run or explicitly documented as not applicable
 - Logs / observability are good enough to diagnose failures
 - Documentation is updated or the PR explains why no doc change is needed
@@ -238,7 +274,7 @@ A task is only done when all of the following are true:
 1. Pull latest `dev`: `git fetch origin dev && git checkout dev && git pull`
 2. Create branch: `git checkout -b fix/issue-N-short-desc`
 3. Start dev environment
-4. Make changes, run tests
+4. Make changes, run pre-flight checks (`markdownlint` for any `.md` edits)
 5. Commit with `Co-Authored-By` footer
 6. Push and open PR to `dev` with `Closes #N` in the body
 7. Apply `awaiting review` label to the issue
