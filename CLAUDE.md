@@ -30,16 +30,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Before You Start
 
 1. **Read the onboarding docs in this order:**
-   - `README.md` — architecture, local setup, branching, deployment
-   - `AGENTS.md` — working instructions, scope discipline, commit conventions
-   - `docs/STYLE_GUIDE.md` — naming, code patterns
-   - `docs/TERMINOLOGY.md` — canonical names (host, environments, services, branches)
-   - `docs/DECISIONS.md` — architecture decisions and the reasoning behind them
+    - `README.md` — architecture, local setup, branching, deployment
+    - `AGENTS.md` — working instructions, scope discipline, commit conventions
+    - `docs/STYLE_GUIDE.md` — naming, code patterns
+    - `docs/TERMINOLOGY.md` — canonical names (host, environments, services, branches)
+    - `docs/DECISIONS.md` — architecture decisions and the reasoning behind them
 
 2. **Project orientation:**
-   - Branching: `main` (prod) ← `dev` (integration) ← `feature/issue-N-*` (your work)
-   - Always branch from `dev`. Never commit directly to `main`.
-   - One branch at a time for ops/infra or security work — finish, PR, merge before starting the next.
+    - Branching: `main` (prod) ← `dev` (integration) ← `feature/issue-N-*` (your work)
+    - Always branch from `dev`. Never commit directly to `main`.
+    - One branch at a time for ops/infra or security work — finish, PR, merge before starting the next.
 
 3. **Current state:** <!-- TODO: Brief note on what's working, what's in progress -->
 
@@ -144,7 +144,7 @@ git push -u origin fix/issue-N-short-description
 **Build observability into every change — it is part of the implementation, not a follow-up.**
 
 - Add structured log lines at meaningful decision points (entry, external-call outcomes, branch taken, failure reasons)
-- Log the *why* of a failure (error + relevant inputs + expectation), never secrets
+- Log the _why_ of a failure (error + relevant inputs + expectation), never secrets
 - A change isn't done until you can answer: "if this breaks in prod, how would we diagnose it from logs alone?"
 - Fail loud, not silent — surface warnings as hard failures, not silent skips
 
@@ -198,6 +198,10 @@ Review these areas with extra care and slower-than-normal edits:
 
 <!-- TODO: Add project-specific high-risk files and directories here -->
 
+| File                  | Why                                  | Mitigation                                                      |
+| --------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| <!-- e.g. auth.js --> | <!-- e.g. WebAuthn state machine --> | <!-- e.g. High test coverage; read full file before editing --> |
+
 ---
 
 ## Sensitive File Handling
@@ -218,3 +222,25 @@ A task is only done when all of the following are true:
 - Logs / observability are good enough to diagnose failures
 - Documentation is updated or the PR explains why no doc change is needed
 - A PR to `dev` is opened with the template fully completed
+
+---
+
+## Questions to Clarify Before Starting
+
+- **Branching:** Are you working from `dev`? (Always, unless it's a hotfix from `main`.)
+- **Scope:** Is this a small bug fix, a feature, or refactoring? (Affects test strategy.)
+- **Data:** Is any existing data being migrated, or is this a fresh change?
+
+---
+
+## TL;DR — Just Starting Work?
+
+1. Pull latest `dev`: `git fetch origin dev && git checkout dev && git pull`
+2. Create branch: `git checkout -b fix/issue-N-short-desc`
+3. Start dev environment
+4. Make changes, run tests
+5. Commit with `Co-Authored-By` footer
+6. Push and open PR to `dev` with `Closes #N` in the body
+7. Apply `awaiting review` label to the issue
+
+Ask if anything is unclear.

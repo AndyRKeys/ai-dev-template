@@ -7,6 +7,7 @@ Please do **not** open a public GitHub issue for security vulnerabilities.
 Report suspected vulnerabilities privately to the repository owner through the preferred private contact method for this project.
 
 Include:
+
 - A description of the issue
 - Steps to reproduce
 - Potential impact

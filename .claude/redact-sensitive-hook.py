@@ -10,7 +10,6 @@ import re
 import sys
 from pathlib import Path
 
-
 data = json.load(sys.stdin)
 fp = data.get("tool_input", {}).get("file_path", "")
 name = os.path.basename(fp)
@@ -40,7 +39,9 @@ sensitive_path_patterns = [
     r"^secrets\.ya?ml$",
 ]
 
-is_sensitive = any(re.match(pattern, name, re.IGNORECASE) for pattern in sensitive_path_patterns)
+is_sensitive = any(
+    re.match(pattern, name, re.IGNORECASE) for pattern in sensitive_path_patterns
+)
 
 if not is_sensitive or allowed_examples:
     sys.exit(0)
@@ -65,8 +66,17 @@ try:
             if kv_match and sensitive_key_pattern.search(kv_match.group(1)):
                 value = kv_match.group(2)
                 replacement = "[redacted]" if value else "(empty)"
-                separator = ":" if ":" in line and ("=" not in line or line.index(":") < line.index("=")) else "="
-                redacted_lines.append(f"{kv_match.group(1)}{separator} {replacement}" if separator == ":" else f"{kv_match.group(1)}={replacement}")
+                separator = (
+                    ":"
+                    if ":" in line
+                    and ("=" not in line or line.index(":") < line.index("="))
+                    else "="
+                )
+                redacted_lines.append(
+                    f"{kv_match.group(1)}{separator} {replacement}"
+                    if separator == ":"
+                    else f"{kv_match.group(1)}={replacement}"
+                )
             else:
                 redacted_lines.append(line)
 except Exception as e:

@@ -20,11 +20,11 @@ This file is the **canonical working rules document** for all AI assistants oper
 ## Commit Hygiene
 
 - Imperative present tense: "fix", "add", "refactor" — not "fixed", "added", "refactored"
-- Short summary (≤50 chars), blank line, optional body explaining *why* (not what — the diff shows what)
+- Short summary (≤50 chars), blank line, optional body explaining _why_ (not what — the diff shows what)
 - Always include the `Co-Authored-By` footer, updated to match the model in use:
-  ```text
-  Co-Authored-By: <AI Model Name> <noreply@example.com>
-  ```
+    ```text
+    Co-Authored-By: <AI Model Name> <noreply@example.com>
+    ```
 - Commit logical units of work — don't bundle unrelated changes in one commit
 - Atomic commits: each commit should leave the codebase in a working state
 
@@ -53,6 +53,7 @@ This file is the **canonical working rules document** for all AI assistants oper
 - Prefer small, tied-to-behaviour doc edits over broad "docs tidy-up" PRs
 
 **When NOT to add docs:**
+
 - Generic "what this function does" explanations — prefer clear naming
 - Obvious patterns that already match the existing style
 - Implementation details that don't affect future work
@@ -64,11 +65,13 @@ This file is the **canonical working rules document** for all AI assistants oper
 These rules apply to **any information that could cause harm if exposed** — not just `.env` files. This includes API keys, tokens, passwords, credentials, PII, private keys, connection strings, and any file or data store that holds them.
 
 **Never read or expose sensitive data directly:**
+
 - Do not read secret-bearing files directly into AI context
 - Do not log, print, or include sensitive values in commit messages, PR bodies, comments, or documentation
 - Do not pass raw secret values as function arguments in examples or test fixtures
 
 **Examples of files that may contain secrets:**
+
 - `.env*`
 - `*.key`, `*.pem`, `*.p12`, `*.pfx`
 - cloud credentials in `.aws/`, `.config/gcloud/`, `.azure/`
@@ -76,18 +79,21 @@ These rules apply to **any information that could cause harm if exposed** — no
 - local override files such as `secrets.yml`, `appsettings.*.json`, `terraform.tfvars`, `.npmrc`, `.pypirc`
 
 **Always use a redaction mechanism:**
+
 - Every project that handles sensitive data must have a redaction layer — a hook, script, or pre-processing step that masks values before they reach AI context
 - The mechanism should: intercept reads of secret-bearing files, replace sensitive values with `[redacted]`, and pass only the sanitised version forward
 - Use regex patterns matching common secret key names (for example `SECRET`, `TOKEN`, `PASS`, `KEY`, `CREDENTIAL`, `PRIVATE`, `CERT`) as a baseline — extend for project-specific patterns
 - Document the redaction mechanism in `CLAUDE.md` so AI tools know how to use it
 
 **Safe patterns to follow:**
+
 - Keep an `.env.example` or equivalent example config with placeholder values only — safe to read and commit
 - Use variable names and config keys in code and docs; never inline actual values
 - When an AI assistant needs to understand the shape of a config, point it to the example file or sanitised sample
 - When a secret must be referenced in a PR, describe it by key name only
 
 **If you discover a secret has been exposed:**
+
 - Treat it as compromised immediately — rotate it before doing anything else
 - Do not attempt to rewrite git history to remove it without also rotating; history rewrites alone are not sufficient
 - Flag the exposure as a high-priority issue
@@ -98,7 +104,7 @@ These rules apply to **any information that could cause harm if exposed** — no
 
 - Build observability into every change — logging is part of the implementation
 - Add structured log lines at: entry points, external-call outcomes, key branch decisions, failure paths
-- Log the *why* of a failure: error message + relevant inputs + what was expected
+- Log the _why_ of a failure: error message + relevant inputs + what was expected
 - Never log secrets, tokens, JWTs, hashes, or any sensitive value
 - A change isn't done until: "if this breaks in prod, how would we diagnose it from logs alone?" has an answer
 - Fail loud, not silent — surface warnings as hard failures where appropriate
