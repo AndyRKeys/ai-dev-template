@@ -4,7 +4,8 @@
 
 Please do **not** open a public GitHub issue for security vulnerabilities.
 
-Report suspected vulnerabilities privately to the repository owner through the preferred private contact method for this project.
+Report suspected vulnerabilities privately to the repository owner through the preferred private
+contact method for this project.
 
 Include:
 

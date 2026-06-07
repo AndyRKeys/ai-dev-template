@@ -1,8 +1,11 @@
 # Architecture Decision Records
 
-This file captures significant architectural and tooling decisions made in this project — what was decided, why, and what alternatives were considered. AI assistants should read this before proposing changes that touch foundational choices.
+This file captures significant architectural and tooling decisions made in this project —
+what was decided, why, and what alternatives were considered. AI assistants should read this
+before proposing changes that touch foundational choices.
 
-> **Template notice:** Add an ADR entry whenever a significant choice is made. Delete this notice once the first real entry exists.
+> **Template notice:** Add an ADR entry whenever a significant choice is made.
+> Delete this notice once the first real entry exists.
 
 ---
 

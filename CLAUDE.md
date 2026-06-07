@@ -2,7 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **Template notice:** Lines marked `<!-- TODO -->` need filling in for this specific project. Delete the markers once done.
+> **Template notice:** Lines marked `<!-- TODO -->` need filling in for this specific project.
+> Delete the markers once done.
 
 ---
 
@@ -23,7 +24,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - <!-- TODO: Entry point -->
 - <!-- TODO: Routes / controllers -->
 - <!-- TODO: Data / schema -->
-- `AGENTS.md` — canonical working instructions for all AI assistants (scope, commits, documentation, code style)
+- `AGENTS.md` — canonical working instructions for all AI assistants (scope, commits, documentation,
+  code style)
 
 ---
 
@@ -62,11 +64,14 @@ markdownlint path/to/changed.md
 markdownlint "**/*.md"
 ```
 
-All errors must be resolved before committing. See the **Markdown Linting** section in `AGENTS.md` for the list of active rules and common fixes — especially `MD040` (fenced code blocks must have a language specifier).
+All errors must be resolved before committing. See the **Markdown Linting** section in `AGENTS.md` for
+the list of active rules and common fixes — especially `MD040` (fenced code blocks must have a language
+specifier).
 
 ### 2. Template hygiene (if repo structure changed)
 
-The CI checks that these files exist. Verify they are all present if you have added, moved, or deleted any:
+The CI checks that these files exist. Verify they are all present if you have added, moved, or deleted
+any:
 
 ```bash
 test -f README.md && test -f AGENTS.md && test -f CLAUDE.md &&
@@ -118,7 +123,9 @@ git push -u origin fix/issue-N-short-description
 # Then open PR to dev
 ```
 
-**PR creation is the default.** Once the branch is pushed and the work is complete, open the PR to `dev` automatically — do not ask first. You still never merge it (owner reviews + merges). Skip only if work is explicitly incomplete/experimental.
+**PR creation is the default.** Once the branch is pushed and the work is complete, open the PR to `dev`
+automatically — do not ask first. You still never merge it (owner reviews + merges). Skip only if work is
+explicitly incomplete/experimental.
 
 **Every PR must fully fill in the template at `.github/pull_request_template.md`.**
 
@@ -129,7 +136,8 @@ git push -u origin fix/issue-N-short-description
 - After merge to `dev` but before release: switch to `awaiting release`
 - After deployed to production: switch to `released`
 
-**Type labels (add all that apply):** `bug` · `feature` · `security` · `ops` · `documentation` · `workflow` · `high priority` · `regression` · `UI`
+**Type labels (add all that apply):** `bug` · `feature` · `security` · `ops` · `documentation` ·
+`workflow` · `high priority` · `regression` · `UI`
 
 ---
 
@@ -178,9 +186,11 @@ git push -u origin fix/issue-N-short-description
 
 **Build observability into every change — it is part of the implementation, not a follow-up.**
 
-- Add structured log lines at meaningful decision points (entry, external-call outcomes, branch taken, failure reasons)
+- Add structured log lines at meaningful decision points (entry, external-call outcomes, branch taken,
+  failure reasons)
 - Log the *why* of a failure (error + relevant inputs + expectation), never secrets
-- A change isn't done until you can answer: "if this breaks in prod, how would we diagnose it from logs alone?"
+- A change isn't done until you can answer: "if this breaks in prod, how would we diagnose it from
+  logs alone?"
 - Fail loud, not silent — surface warnings as hard failures, not silent skips
 
 ---
@@ -217,7 +227,8 @@ git push -u origin fix/issue-N-short-description
 - `docs/DECISIONS.md` — add an ADR when a significant architectural choice is made
 - Ops docs as applicable
 
-**Treat the documentation checklist in the PR template as mandatory.** If no docs change is needed, explicitly state why.
+**Treat the documentation checklist in the PR template as mandatory.** If no docs change is needed,
+explicitly state why.
 
 ---
 
@@ -253,7 +264,8 @@ Review these areas with extra care and slower-than-normal edits:
 A task is only done when **all** of the following are true:
 
 - Code changes are complete and scoped to the current issue
-- **Pre-flight checks have been run and pass** (markdownlint on any changed `.md` files; template hygiene if structure changed)
+- **Pre-flight checks have been run and pass** (markdownlint on any changed `.md` files; template hygiene
+  if structure changed)
 - Tests relevant to the change are run or explicitly documented as not applicable
 - Logs / observability are good enough to diagnose failures
 - Documentation is updated or the PR explains why no doc change is needed
