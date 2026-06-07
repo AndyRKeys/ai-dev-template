@@ -20,11 +20,13 @@ This file is the **canonical working rules document** for all AI assistants oper
 ## Commit Hygiene
 
 - Imperative present tense: "fix", "add", "refactor" — not "fixed", "added", "refactored"
-- Short summary (≤50 chars), blank line, optional body explaining _why_ (not what — the diff shows what)
+- Short summary (≤50 chars), blank line, optional body explaining *why* (not what — the diff shows what)
 - Always include the `Co-Authored-By` footer, updated to match the model in use:
+
     ```text
     Co-Authored-By: <AI Model Name> <noreply@example.com>
     ```
+
 - Commit logical units of work — don't bundle unrelated changes in one commit
 - Atomic commits: each commit should leave the codebase in a working state
 
@@ -104,7 +106,7 @@ These rules apply to **any information that could cause harm if exposed** — no
 
 - Build observability into every change — logging is part of the implementation
 - Add structured log lines at: entry points, external-call outcomes, key branch decisions, failure paths
-- Log the _why_ of a failure: error message + relevant inputs + what was expected
+- Log the *why* of a failure: error message + relevant inputs + what was expected
 - Never log secrets, tokens, JWTs, hashes, or any sensitive value
 - A change isn't done until: "if this breaks in prod, how would we diagnose it from logs alone?" has an answer
 - Fail loud, not silent — surface warnings as hard failures where appropriate
@@ -161,4 +163,4 @@ For any project where AI suggestions can result in file system changes, shell ex
 - Skip the PR template
 - Leave documentation out of date
 - Execute destructive file operations without a preceding dry-run and explicit approval
-- Read or relay sensitive data without passing it through the project’s redaction mechanism first
+- Read or relay sensitive data without passing it through the project's redaction mechanism first

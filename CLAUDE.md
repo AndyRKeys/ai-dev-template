@@ -144,7 +144,7 @@ git push -u origin fix/issue-N-short-description
 **Build observability into every change — it is part of the implementation, not a follow-up.**
 
 - Add structured log lines at meaningful decision points (entry, external-call outcomes, branch taken, failure reasons)
-- Log the _why_ of a failure (error + relevant inputs + expectation), never secrets
+- Log the *why* of a failure (error + relevant inputs + expectation), never secrets
 - A change isn't done until you can answer: "if this breaks in prod, how would we diagnose it from logs alone?"
 - Fail loud, not silent — surface warnings as hard failures, not silent skips
 
