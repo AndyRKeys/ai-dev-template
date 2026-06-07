@@ -88,32 +88,34 @@ markdownlint "**/*.md"
 |---|---|---|
 | `MD040` | Fenced code block with no language specified | Add a language: ` ```bash `, ` ```text `, ` ```markdown `, etc. Use ` ```text ` for plain diagrams or file trees. |
 | `MD022` | Heading not surrounded by blank lines | Add a blank line before and after every heading. |
+| `MD031` | Fenced code block not surrounded by blank lines | Add a blank line before the opening fence and after the closing fence. |
 | `MD032` | List not surrounded by blank lines | Add a blank line before and after every list. |
 | `MD009` | Trailing spaces | Remove trailing whitespace (exception: two trailing spaces for a hard line break). |
 
-> **MD013 (line length), MD024 (duplicate headings), MD036 (emphasis as heading), MD041 (first line heading), and MD060 (fenced code style) are disabled** in `.markdownlint.json` — you do not need to worry about those.
+> **MD002 (first-heading-h1), MD013 (line length), MD024 (duplicate headings), MD036 (emphasis as heading), MD041 (first line heading), and MD060 (fenced code style) are disabled** in `.markdownlint.json` — you do not need to worry about those.
 
 ### When adding a new fenced code block
 
 Always specify the language. If the content is not code but a diagram, file tree, or plain text output, use ` ```text `.
 
-```text
-# CORRECT
+Correct — language specified:
+
 ```bash
 npm install
 ```
 
-# CORRECT (plain / diagram)
+Correct — plain text / diagram:
+
 ```text
 project-root/
 ├── src/
 └── docs/
 ```
 
-# WRONG — triggers MD040
-```
-npm install
-```
+Wrong — triggers MD040 (no language after the opening fence):
+
+```text
+(do not open a code block with just ``` and no language tag)
 ```
 
 ---

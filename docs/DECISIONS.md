@@ -13,20 +13,24 @@ Copy the template below, fill it in, and append it to this file. Keep entries in
 ```markdown
 ## ADR-NNN — Title
 
-**Date:** YYYY-MM-DD  
+**Date:** YYYY-MM-DD
 **Status:** Accepted | Superseded by ADR-NNN | Deprecated
 
 ### Context
+
 What situation or problem prompted this decision?
 
 ### Decision
+
 What was decided?
 
 ### Alternatives considered
+
 - Option A — why rejected
 - Option B — why rejected
 
 ### Consequences
+
 What does this make easier? What does it make harder?
 ```
 
@@ -34,17 +38,21 @@ What does this make easier? What does it make harder?
 
 ## ADR-001 — Template placeholder
 
-**Date:** <!-- TODO -->  
+**Date:** <!-- TODO -->
 **Status:** <!-- TODO -->
 
 ### Context
+
 <!-- TODO -->
 
 ### Decision
+
 <!-- TODO -->
 
 ### Alternatives considered
+
 <!-- TODO -->
 
 ### Consequences
+
 <!-- TODO -->

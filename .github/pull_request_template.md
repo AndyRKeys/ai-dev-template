@@ -8,8 +8,8 @@ Closes #<!-- issue number -->
 
 <!-- Bullet list of files/areas changed and what changed -->
 
--
--
+- <!-- describe change 1 -->
+- <!-- describe change 2 -->
 
 ## Test Plan
 
@@ -17,9 +17,9 @@ Closes #<!-- issue number -->
 
 ### Happy path
 
-1.
-2.
-3.
+1. <!-- step 1 -->
+2. <!-- step 2 -->
+3. <!-- step 3 -->
 
 ### Edge cases
 
@@ -31,8 +31,8 @@ Closes #<!-- issue number -->
 
 <!-- Features that could have been affected and should be verified still work -->
 
-- [ ]
-- [ ]
+- [ ] <!-- feature 1 still works -->
+- [ ] <!-- feature 2 still works -->
 
 ### Setup required before testing
 
@@ -61,7 +61,7 @@ Closes #<!-- issue number -->
 
 <!-- For security/infra/ops changes, briefly note risk, impact, or threat mitigated. -->
 
--
+- <!-- describe risk or impact, or state: Low — no application behaviour changes -->
 
 ## Squash Commit Message
 
