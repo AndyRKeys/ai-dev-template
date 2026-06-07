@@ -1,0 +1,38 @@
+name: CI
+
+on:
+    pull_request:
+    push:
+        branches: [main, dev]
+
+jobs:
+    docs-and-format:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+
+            - name: Install markdownlint-cli
+              run: npm install --global markdownlint-cli
+
+            - name: Check markdown
+              run: markdownlint "**/*.md"
+
+            - name: Check template hygiene
+              run: |
+                  test -f README.md
+                  test -f AGENTS.md
+                  test -f CLAUDE.md
+                  test -f docs/CHANGELOG.md
+                  test -f docs/DECISIONS.md
+                  test -f docs/STYLE_GUIDE.md
+                  test -f docs/TERMINOLOGY.md
+                  test -f .github/pull_request_template.md
+                  test -f .env.example
+                  test -f SECURITY.md
+                  test -f CONTRIBUTING.md

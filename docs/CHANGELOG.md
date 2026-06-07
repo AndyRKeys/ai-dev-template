@@ -1,17 +1,15 @@
 # Changelog
 
-All notable changes to this project are documented here.
+All notable changes to this project will be documented in this file.
 
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-Versioning follows [Semantic Versioning](https://semver.org/).
-
----
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project aims to follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
 ### Added
 
-- Initial project scaffold
+- Initial changelog stub for template consumers.
 
 ---
 

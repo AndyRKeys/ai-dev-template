@@ -1,10 +1,13 @@
 # AGENTS.md — AI Working Instructions
 
-This file is the **canonical working rules document** for all AI assistants operating in this repository — including Claude Code, OpenAI Codex, GitHub Copilot Workspace, Gemini Code Assist, and any equivalent tool.
+This file is the **canonical working rules document** for all AI assistants operating in this repository —
+including Claude Code, OpenAI Codex, GitHub Copilot Workspace, Gemini Code Assist, and any equivalent tool.
 
-`CLAUDE.md` (Claude Code entry point) and any other tool-specific entry files all defer to this document for detail.
+`CLAUDE.md` (Claude Code entry point) and any other tool-specific entry files all defer to this document
+for detail.
 
-> **Model version note:** The `Co-Authored-By` footer in commits should reflect the model actually used. Update it when switching models (e.g. `Claude Sonnet 4.6`, `gpt-4o`, `gemini-2.5-pro`).
+> **Model version note:** The `Co-Authored-By` footer in commits should reflect the model actually used.
+> Update it when switching models (for example `Claude Sonnet 4.6`, `GPT-5`, `gemini-2.5-pro`).
 
 ---
 
@@ -22,9 +25,11 @@ This file is the **canonical working rules document** for all AI assistants oper
 - Imperative present tense: "fix", "add", "refactor" — not "fixed", "added", "refactored"
 - Short summary (≤50 chars), blank line, optional body explaining *why* (not what — the diff shows what)
 - Always include the `Co-Authored-By` footer, updated to match the model in use:
-  ```
-  Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
-  ```
+
+    ```text
+    Co-Authored-By: <AI Model Name> <noreply@example.com>
+    ```
+
 - Commit logical units of work — don't bundle unrelated changes in one commit
 - Atomic commits: each commit should leave the codebase in a working state
 
@@ -53,36 +58,119 @@ This file is the **canonical working rules document** for all AI assistants oper
 - Prefer small, tied-to-behaviour doc edits over broad "docs tidy-up" PRs
 
 **When NOT to add docs:**
+
 - Generic "what this function does" explanations — prefer clear naming
 - Obvious patterns that already match the existing style
 - Implementation details that don't affect future work
 
 ---
 
+## Markdown Linting (mandatory before every commit)
+
+The CI `docs-and-format` job runs `markdownlint` on every PR. **You must run the linter locally against
+any `.md` files you have touched before committing.** Do not rely on CI to catch lint errors — fix them
+before the commit.
+
+### One-time setup
+
+```bash
+npm install --global markdownlint-cli
+```
+
+### Run before every commit that touches `.md` files
+
+```bash
+# Lint only the files you changed (fast)
+markdownlint <path/to/changed-file.md> [<another.md> ...]
+
+# Or lint the whole repo at once
+markdownlint "**/*.md"
+```
+
+### Common violations to avoid
+
+| Rule | What it catches | Fix |
+|---|---|---|
+| `MD040` | Fenced code block with no language specified | Add a language: ` ```bash `, ` ```text `, ` ```markdown `, etc. Use ` ```text ` for plain diagrams or file trees. |
+| `MD022` | Heading not surrounded by blank lines | Add a blank line before and after every heading. |
+| `MD031` | Fenced code block not surrounded by blank lines | Add a blank line before the opening fence and after the closing fence. |
+| `MD032` | List not surrounded by blank lines | Add a blank line before and after every list. |
+| `MD009` | Trailing spaces | Remove trailing whitespace (exception: two trailing spaces for a hard line break). |
+
+> **MD002 (first-heading-h1), MD013 (line length), MD024 (duplicate headings), MD036 (emphasis as heading),
+> MD041 (first line heading), and MD060 (fenced code style) are disabled** in `.markdownlint.json` —
+> you do not need to worry about those.
+
+### When adding a new fenced code block
+
+Always specify the language. If the content is not code but a diagram, file tree, or plain text output,
+use ` ```text `.
+
+Correct — language specified:
+
+```bash
+npm install
+```
+
+Correct — plain text / diagram:
+
+```text
+project-root/
+├── src/
+└── docs/
+```
+
+Wrong — triggers MD040 (no language after the opening fence):
+
+```text
+(do not open a code block with just ``` and no language tag)
+```
+
+---
+
 ## Secrets & Sensitive Data
 
-These rules apply to **any information that could cause harm if exposed** — not just `.env` files. This includes API keys, tokens, passwords, credentials, PII, private keys, connection strings, and any file or data store that holds them.
+These rules apply to **any information that could cause harm if exposed** — not just `.env` files.
+This includes API keys, tokens, passwords, credentials, PII, private keys, connection strings,
+and any file or data store that holds them.
 
-**Never read or expose secrets directly:**
-- Do not read secret files (`.env`, key files, credential stores, config files with embedded secrets) directly into AI context
-- Do not log, print, or include secret values in commit messages, PR bodies, comments, or documentation
+**Never read or expose sensitive data directly:**
+
+- Do not read secret-bearing files directly into AI context
+- Do not log, print, or include sensitive values in commit messages, PR bodies, comments, or documentation
 - Do not pass raw secret values as function arguments in examples or test fixtures
 
+**Examples of files that may contain secrets:**
+
+- `.env*`
+- `*.key`, `*.pem`, `*.p12`, `*.pfx`
+- cloud credentials in `.aws/`, `.config/gcloud/`, `.azure/`
+- Docker, Terraform, CI, or deploy config containing embedded credentials
+- local override files such as `secrets.yml`, `appsettings.*.json`, `terraform.tfvars`, `.npmrc`, `.pypirc`
+
 **Always use a redaction mechanism:**
-- Every project that handles secrets must have a redaction layer — a hook, script, or pre-processing step that masks sensitive values before they reach AI context
-- The mechanism should: intercept reads of secret files, replace sensitive values with `[redacted]`, and pass only the sanitised version forward
-- Use regex patterns matching common secret key names (e.g. `SECRET`, `TOKEN`, `PASS`, `KEY`, `CREDENTIAL`) as a baseline — extend for project-specific patterns
+
+- Every project that handles sensitive data must have a redaction layer — a hook, script, or pre-processing
+  step that masks values before they reach AI context
+- The mechanism should: intercept reads of secret-bearing files, replace sensitive values with `[redacted]`,
+  and pass only the sanitised version forward
+- Use regex patterns matching common secret key names (for example `SECRET`, `TOKEN`, `PASS`, `KEY`,
+  `CREDENTIAL`, `PRIVATE`, `CERT`) as a baseline — extend for project-specific patterns
 - Document the redaction mechanism in `CLAUDE.md` so AI tools know how to use it
 
 **Safe patterns to follow:**
-- Keep a `.env.example` (or equivalent) with placeholder values — this is always safe to read and commit
-- Use environment variable names in code and docs; never inline actual values
-- When an AI assistant needs to understand the shape of a config, point it to the `.example` file
-- When a secret must be rotated or referenced in a PR, describe it by key name only
+
+- Keep an `.env.example` or equivalent example config with placeholder values only — safe to read and commit
+- Use variable names and config keys in code and docs; never inline actual values
+- When an AI assistant needs to understand the shape of a config, point it to the example file or
+  sanitised sample
+- When a secret must be referenced in a PR, describe it by key name only
 
 **If you discover a secret has been exposed:**
+
 - Treat it as compromised immediately — rotate it before doing anything else
-- Do not attempt to rewrite git history to remove it without also rotating; history rewrites alone are not sufficient
+- Do not attempt to rewrite git history to remove it without also rotating; history rewrites alone
+  are not sufficient
 - Flag the exposure as a high-priority issue
 
 ---
@@ -104,7 +192,7 @@ These rules apply to **any information that could cause harm if exposed** — no
 - A `# comment` above every command explaining what it verifies and why it matters for this PR
 - The **expected output** after each command — reviewer knows pass vs fail at a glance
 - Steps for both happy path and key edge cases
-- Where a step requires waiting (e.g. token expiry), a DB or config command to simulate it instead
+- Where a step requires waiting (for example token expiry), a DB or config command to simulate it instead
 
 ---
 
@@ -119,13 +207,28 @@ These rules apply to **any information that could cause harm if exposed** — no
 
 ## Execution Safety (file system, shell, and destructive operations)
 
-For any project where AI suggestions can result in file system changes, shell execution, or destructive operations:
+For any project where AI suggestions can result in file system changes, shell execution, or destructive
+operations:
 
-- **Never suggest or generate commands that delete, overwrite, or move files without a dry-run flag** — always offer `--dry-run` or `-WhatIf` (PowerShell) as the default first step
-- **Destructive actions require explicit human approval** — do not chain a dry-run directly into live execution
+- **Never suggest or generate commands that delete, overwrite, or move files without a dry-run flag** —
+  always offer `--dry-run` or `-WhatIf` (PowerShell) as the default first step
+- **Destructive actions require explicit human approval** — do not chain a dry-run directly into live
+  execution
 - **Quarantine before delete** — prefer moving items to a dated quarantine folder over permanent deletion
 - **Scope writes to one root at a time** — never operate across multiple root directories in a single command
 - **Log every proposed action to a file** before execution so there is a reviewable audit trail
+
+---
+
+## Merge Conflict Handling
+
+- Prefer `git rebase` onto the latest target branch rather than merging the target branch into the
+  feature branch
+- If conflicts touch auth, secrets, migrations, infrastructure, or generated lockfiles, stop and request
+  human review
+- Never force-push to protected branches
+- If a conflict resolution could change behaviour in a non-obvious way, document it in the PR notes and
+  test plan
 
 ---
 
@@ -139,4 +242,5 @@ For any project where AI suggestions can result in file system changes, shell ex
 - Skip the PR template
 - Leave documentation out of date
 - Execute destructive file operations without a preceding dry-run and explicit approval
-- Read or relay sensitive data without passing it through the project’s redaction mechanism first
+- Read or relay sensitive data without passing it through the project's redaction mechanism first
+- Commit `.md` files without first running `markdownlint` and resolving all errors
