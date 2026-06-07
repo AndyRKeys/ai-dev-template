@@ -1,31 +1,29 @@
 ---
 name: Feature request
-about: New functionality or enhancement
-labels: enhancement
+about: Suggest a new capability or improvement
+title: 'feat: '
+labels: feature
+assignees: ''
 ---
 
-## Summary
+## What problem does this solve?
 
-<!-- One sentence describing the feature -->
+<!-- Describe the gap or pain point. Focus on the problem, not the solution. -->
 
-## Motivation
+## Proposed solution
 
-<!-- Why is this needed? What problem does it solve? -->
+<!-- What would you like to happen? -->
 
-## Proposed Solution
+## Alternatives considered
 
-<!-- How should it work from the user's perspective? -->
+<!-- What other approaches did you think about? Why are they less suitable? -->
 
-## Acceptance Criteria
+## Acceptance criteria
 
-- [ ]
-- [ ]
-- [ ]
+- [ ] 
+- [ ] 
+- [ ] 
 
-## Out of Scope
+## Additional context
 
-<!-- Anything explicitly NOT included in this issue -->
-
-## Additional Context
-
-<!-- Related issues, mockups, examples, or anything else relevant -->
+<!-- Screenshots, links, related issues, anything else useful. -->

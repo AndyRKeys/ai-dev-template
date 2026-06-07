@@ -1,37 +1,35 @@
 ---
 name: Bug report
-about: Something is broken or behaving unexpectedly
+about: Something isn't working as expected
+title: 'bug: '
 labels: bug
+assignees: ''
 ---
 
-## Description
+## What happened?
 
-<!-- What is broken? One clear sentence. -->
+<!-- A clear description of the bug. -->
 
-## Steps to Reproduce
+## Steps to reproduce
 
-1.
-2.
-3.
+1. 
+2. 
+3. 
 
-## Expected Behaviour
+## Expected behaviour
 
-<!-- What should happen -->
+<!-- What should have happened? -->
 
-## Actual Behaviour
+## Actual behaviour
 
-<!-- What actually happens -->
+<!-- What happened instead? Include error messages, stack traces, or screenshots. -->
 
 ## Environment
 
-- OS / Platform:
-- Version / Branch:
-- Local or production:
+- OS:
+- Browser / runtime version:
+- Relevant config or env (no secrets):
 
-## Screenshots / Logs
+## Additional context
 
-<!-- Paste any console errors, logs, or screenshots here -->
-
-## Additional Context
-
-<!-- Related issues, PRs, or anything else relevant -->
+<!-- Anything else useful? -->

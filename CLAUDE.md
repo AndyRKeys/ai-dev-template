@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - <!-- TODO: Entry point -->
 - <!-- TODO: Routes / controllers -->
 - <!-- TODO: Data / schema -->
-- `docs/AI.md` — your working instructions (scope, commits, documentation, code style)
+- `AGENTS.md` — canonical working instructions for all AI assistants (scope, commits, documentation, code style)
 
 ---
 
@@ -31,9 +31,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 1. **Read the onboarding docs in this order:**
    - `README.md` — architecture, local setup, branching, deployment
-   - `docs/AI.md` — working instructions, scope discipline, commit conventions
+   - `AGENTS.md` — working instructions, scope discipline, commit conventions
    - `docs/STYLE_GUIDE.md` — naming, code patterns
    - `docs/TERMINOLOGY.md` — canonical names (host, environments, services, branches)
+   - `docs/DECISIONS.md` — architecture decisions and the reasoning behind them
 
 2. **Project orientation:**
    - Branching: `main` (prod) ← `dev` (integration) ← `feature/issue-N-*` (your work)
@@ -134,7 +135,7 @@ git push -u origin fix/issue-N-short-description
 
 - Imperative present tense: "fix", "add", "refactor" — not "fixed", "added"
 - Short summary (≤50 chars), blank line, optional explanation
-- Always include `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` footer
+- Always include `Co-Authored-By` footer matching the model in use (see `AGENTS.md`)
 
 ---
 
@@ -176,8 +177,9 @@ git push -u origin fix/issue-N-short-description
 **What to update:**
 
 - `README.md` — top-level workflow, commands, directory trees
-- `docs/AI.md` — working rules for AI helpers
+- `AGENTS.md` — working rules for AI helpers
 - `docs/CHANGELOG.md` — every PR gets a `[Unreleased]` entry
+- `docs/DECISIONS.md` — add an ADR when a significant architectural choice is made
 - Ops docs as applicable
 
 **Treat the documentation checklist in the PR template as mandatory.** If no docs change is needed, explicitly state why.
@@ -186,7 +188,15 @@ git push -u origin fix/issue-N-short-description
 
 ## High-Risk Areas
 
-<!-- TODO: List files/areas that are dangerous to modify carelessly -->
+<!-- TODO: List files/areas that are dangerous to modify carelessly.
+     High-risk areas typically include:
+     - Auth, session, or token handling
+     - Anything that reads from or writes to .env / secrets
+     - Database migration scripts
+     - Deployment or CI/CD pipeline configuration
+     - File system operations that can delete or overwrite data
+     - Any external API integration that has billing or rate-limit consequences
+-->
 
 | File | Why | Mitigation |
 |------|-----|------------|

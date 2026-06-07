@@ -8,8 +8,9 @@ A reusable scaffold for AI-led development. Clone or use as a GitHub template to
 
 | File / Folder | Purpose |
 |---|---|
-| `CLAUDE.md` | Master AI context file — read by Claude Code at session start. Edit this first for every new project. |
-| `docs/AI.md` | AI working rules: scope discipline, commit hygiene, PR expectations |
+| `CLAUDE.md` | Claude Code entry point — read at session start. Edit this first for every new project. |
+| `AGENTS.md` | Canonical AI working rules for all assistants (Claude, Codex, Copilot Workspace, Gemini). Scope discipline, commits, PRs, security, execution safety. |
+| `docs/DECISIONS.md` | Architecture Decision Records — why key choices were made |
 | `docs/STYLE_GUIDE.md` | Naming conventions, code patterns, button/component variants |
 | `docs/CHANGELOG.md` | Keep-a-Changelog format. AI keeps this updated every PR. |
 | `docs/TERMINOLOGY.md` | Canonical names for hosts, environments, services, branches |
@@ -36,7 +37,7 @@ A reusable scaffold for AI-led development. Clone or use as a GitHub template to
 # From your existing repo root:
 git remote add template https://github.com/AndyRKeys/ai-dev-template.git
 git fetch template
-git checkout template/main -- CLAUDE.md docs/ .github/ .claude/ .markdownlint.json .prettierrc .prettierignore
+git checkout template/main -- CLAUDE.md AGENTS.md docs/ .github/ .claude/ .markdownlint.json .prettierrc .prettierignore
 git remote remove template
 ```
 
@@ -47,12 +48,14 @@ git remote remove template
 After cloning or applying this template, work through these in order:
 
 - [ ] **Edit `CLAUDE.md`** — fill in Quick Orientation, tech stack, key files, common commands
+- [ ] **Edit `AGENTS.md`** — remove the execution safety section if the project has no destructive file/shell operations; add any project-specific rules
 - [ ] **Edit `docs/TERMINOLOGY.md`** — define your canonical names (host, envs, branches, services)
-- [ ] **Edit `docs/AI.md`** — adjust scope rules and any project-specific working constraints
 - [ ] **Edit `docs/STYLE_GUIDE.md`** — add your naming conventions and code patterns
+- [ ] **Add first entry to `docs/DECISIONS.md`** — record the key architectural choices made at project start
 - [ ] **Update `.claude/settings.json`** — add any path-specific `deny` rules for your `.env` locations
 - [ ] **Update `.gitignore`** — extend for your language/framework if needed
-- [ ] **Delete placeholder comments** from all `docs/` stubs once filled in
+- [ ] **Configure branch protection** in GitHub → Settings → Branches: protect `main` (require PR + review) and `dev` (require PR). AI never pushes directly to either.
+- [ ] **Delete placeholder comments** from all stubs once filled in
 - [ ] **Mark this repo as a template** (Settings → check "Template repository") if you want GitHub to list it
 
 ---
@@ -80,6 +83,8 @@ Optional longer explanation of why, not what.
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 ```
+
+Update the `Co-Authored-By` line to match whichever model is in use on the project.
 
 Types: `feat` `fix` `refactor` `docs` `test` `ops` `chore`
 
